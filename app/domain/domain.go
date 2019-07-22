@@ -1,5 +1,7 @@
 package domain
 
+import "fmt"
+
 // Car represent a car entity in the system
 type Car struct {
 	ID    int
@@ -39,14 +41,15 @@ func (g *Gruop) AddGroup(carID int, j Journey) {
 }
 
 // GetJourney get the journey for a car
-func (qj *QueueJourney) GetJourney(requiered int) Journey {
-
+func (qj *QueueJourney) GetJourney(requiered int) (Journey, error) {
+	var jAux Journey
 	for i, j := range qj.Journeys {
 		if j.People <= requiered {
-			var jAux Journey
-			jAux = j
+			jAux.ID = j.ID
+			jAux.People = j.People
 			qj.Journeys = append(qj.Journeys[:i], qj.Journeys[i+1:]...)
-			return jAux
+			return jAux, nil
 		}
 	}
+	return jAux, fmt.Errorf("NO hay")
 }
