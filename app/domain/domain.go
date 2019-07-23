@@ -31,7 +31,7 @@ func (qj *QueueJourney) AddJourney(id, people int) {
 	var j Journey
 	j.ID = id
 	j.People = people
-	qj.Journeys = append(qj.Journeys, g)
+	qj.Journeys = append(qj.Journeys, j)
 }
 
 // AddGroup initialize a group with a car and journey

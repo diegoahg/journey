@@ -12,7 +12,7 @@ func main() {
 	r := infrastructure.NewRouter()
 
 	r.HandleFunc("/status", interfaces.StatusHandler).Methods("GET")
-	//r.HandleFunc("/cars", app.AddProductHandler).Methods("PUT")
+	r.HandleFunc("/cars", interfaces.AddProductHandler).Methods("PUT")
 	//r.HandleFunc("/journey", app.GetAmountHandler).Methods("POST")
 	//r.HandleFunc("/dropoff", app.RemoveBasketHandler).Methods("POST")
 	//r.HandleFunc("/locate", app.RemoveBasketHandler).Methods("POST")

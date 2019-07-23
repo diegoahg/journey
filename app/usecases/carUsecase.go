@@ -8,6 +8,13 @@ type CarUsecase interface {
 	Add() (id, seats int)
 }
 
+func NewUserUsecase(repo repository.UserRepository, service *service.UserService) *userUsecase {
+	return &userUsecase{
+		repo:    repo,
+		service: service,
+	}
+}
+
 // carUsecase is in charge tu create anew car.
 type carUsecase struct {
 	Cars []Car
