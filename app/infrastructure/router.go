@@ -9,6 +9,6 @@ import (
 // NewRouter create a Mux instance to connect api
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
-	log.Println("Initialized router")
+	log.Println("Router Initialized")
 	return r
 }

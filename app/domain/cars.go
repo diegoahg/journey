@@ -9,6 +9,25 @@ type Car struct {
 	Empty int
 }
 
+func (c *Car) GetID() int {
+	return c.ID
+}
+
+func (c *Car) GetSeats() int {
+	return c.Seats
+}
+
+func (c *Car) GetEmpty() int {
+	return c.Empty
+}
+
+func NewCar(id, seats int) *Car {
+	return &Car{
+		ID:    id,
+		Seats: seats,
+	}
+}
+
 // Journey represents a set of people that can take a car
 type Journey struct {
 	ID     int

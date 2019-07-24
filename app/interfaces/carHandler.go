@@ -6,43 +6,59 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/diegoahg/journey/app/usecases"
+	"github.com/diegoahg/journey/app/usecase"
 )
 
-type carService struct {
-	carUsecase usecases.CarUsecase
+type carHandler struct {
+	CarUsecase *usecase.CarUsecase
 }
 
-// CarInput takes incoming JSON payload for writing heart rate
-type CarInput struct {
-	ID    int    `json:"id"`
-	Seats string `json:"seats"`
-}
-
-func NewCarService(carUsecase usecase.CarUsecase) *carService {
-	return &carService{
-		carUsecase: carUsecase,
+func NewCarHandler(carUsecase *usecase.CarUsecase) *carHandler {
+	return &carHandler{
+		CarUsecase: carUsecase,
 	}
 }
 
-func (c *carService) AddCar(w http.ResponseWriter, r *http.Request) {
-	log.Println("CarsService actived")
+func (c *carHandler) Execute(w http.ResponseWriter, r *http.Request) {
+	log.Println("CarsHandler actived")
 	contentType := r.Header.Get("Content-type")
 	if contentType != "application/json" {
-		w.WriteHeader(400)
+		log.Println(fmt.Errorf("Content Type is not valid"))
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
-	var input []CarInput
+
+	var input []usecase.CarInput
 	defer r.Body.Close()
+
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&input); err != nil {
-		w.WriteHeader(402)
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
-	if err := json.Unmarshal(body, &input); err != nil {
-		w.WriteHeader(404)
+	if err := c.validate(input); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
-	_ := c.carUsecase.AddCar()
+	if err := c.CarUsecase.PutCars(input); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	log.Println(fmt.Sprintf("Car created"))
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
+}
+
+func (c *carHandler) validate(data []usecase.CarInput) error {
+	for _, e := range data {
+		if e.ID == 0 || e.Seats == 0 {
+			return fmt.Errorf("Data is not valid")
+		}
+	}
+	return nil
 }
