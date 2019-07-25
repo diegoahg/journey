@@ -7,6 +7,8 @@ import (
 type CarRepository interface {
 	Save(*domain.Car) error
 	RemoveAll() error
+	GetEmptys() ([]*domain.Car, error)
+	Update(*domain.Car) error
 }
 
 type CarUsecase struct {
@@ -24,7 +26,7 @@ func (c *CarUsecase) PutCars(cars []CarInput) error {
 		return err
 	}
 	for _, v := range cars {
-		car := domain.NewCar(v.ID, v.Seats)
+		car := domain.NewCar(v.ID, v.Seats, v.Seats) // for initialize Empty === Seats
 		if err := c.Repo.Save(car); err != nil {
 			return err
 		}

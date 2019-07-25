@@ -13,15 +13,31 @@ import (
 func main() {
 	r := infrastructure.NewRouter()
 
+	carRepo := repository.NewCarRepository()
+	journeyRepo := repository.NewJourneyRepository()
+
 	carHandler := interfaces.NewCarHandler(
 		&usecase.CarUsecase{
-			Repo: repository.NewCarRepository(),
+			Repo: carRepo,
 		},
 	)
 
+	journeyHandler := interfaces.NewJourneyHandler(
+		&usecase.JourneyUsecase{
+			Repo: journeyRepo,
+		},
+	)
+
+	group := usecase.GroupUsecase{
+		CarRepo:     carRepo,
+		JourneyRepo: journeyRepo,
+	}
+
+	go group.Assign()
+
 	r.HandleFunc("/status", interfaces.StatusHandler).Methods("GET")
 	r.HandleFunc("/cars", carHandler.Execute).Methods("PUT")
-	//r.HandleFunc("/journey", app.GetAmountHandler).Methods("POST")
+	r.HandleFunc("/journey", journeyHandler.Execute).Methods("POST")
 	//r.HandleFunc("/dropoff", app.RemoveBasketHandler).Methods("POST")
 	//r.HandleFunc("/locate", app.RemoveBasketHandler).Methods("POST")
 
