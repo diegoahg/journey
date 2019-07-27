@@ -1,10 +1,5 @@
 package usecase
 
-import (
-	"github.com/diegoahg/journey/app/domain"
-)
-
-
 type DropOffUsecase struct {
 	CarRepo     CarRepository
 	JourneyRepo JourneyRepository
@@ -12,35 +7,33 @@ type DropOffUsecase struct {
 
 // JourneyInput takes incoming JSON payload for writing heart rate
 type DropOffInput struct {
-	ID     int `json:"id"`
+	ID int `schema:"id"`
 }
 
-func (d *DropOffUsecase) DropOff(di DropOffInput) error {
-	journey, err := d.JourneyRepo.FindByID(di.ID);
+func (d *DropOffUsecase) DropOff(di DropOffInput) (int, error) {
+	journey, err := d.JourneyRepo.FindByID(di.ID)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	if(journey == nil){
-		return "not found"
-	} 
+	if journey == nil {
+		return 404, nil
+	}
 
-	car, err := d.CarRepo.FindByID(journey.GetCarID());
+	car, err := d.CarRepo.FindByID(journey.GetCarID())
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	car.Empty = car.GetEmpty() + journey.GetPeople()
-	err:= d.CarRepo.Update(journey.GetCarID());
+	err = d.CarRepo.Update(car)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if err := d.JourneyRepo.RemoveByID(di.ID); err != nil {
-		return err
+		return 0, err
 	}
 
-	//DEVOLVER ESTADOS
-	// return  "ok"
-	return nil
+	return 200, nil
 }

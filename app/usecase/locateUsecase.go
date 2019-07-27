@@ -1,10 +1,5 @@
 package usecase
 
-import (
-	"github.com/diegoahg/journey/app/domain"
-)
-
-
 type LocateUsecase struct {
 	CarRepo     CarRepository
 	JourneyRepo JourneyRepository
@@ -12,22 +7,22 @@ type LocateUsecase struct {
 
 // JourneyInput takes incoming JSON payload for writing heart rate
 type LocateInput struct {
-	ID     int `json:"id"`
+	ID int `json:"id"`
 }
 
-func (d *LocateUsecase) Locate(li LocateInput) error {
-	journey, err := d.JourneyRepo.FindByID(di.ID);
+func (d *LocateUsecase) Locate(li LocateInput) (int, error) {
+	journey, err := d.JourneyRepo.FindByID(li.ID)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	if(journey == nil){
-		return "not found"
+	if journey == nil {
+		return 404, nil
 	}
 
-	if(journey.GetCarID() == nil){
-		return "not assigned"
+	if journey.GetCarID() == 0 {
+		return 204, nil
 	}
 
-	return nil
+	return 200, nil
 }

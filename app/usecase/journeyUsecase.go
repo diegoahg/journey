@@ -8,6 +8,8 @@ type JourneyRepository interface {
 	Save(*domain.Journey) error
 	Update(*domain.Journey) error
 	GetQueueing() ([]*domain.Journey, error)
+	FindByID(int) (*domain.Journey, error)
+	RemoveByID(id int) error
 }
 
 type JourneyUsecase struct {

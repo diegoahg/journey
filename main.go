@@ -12,6 +12,7 @@ import (
 
 func main() {
 	r := infrastructure.NewRouter()
+	s := infrastructure.NewSchema()
 
 	carRepo := repository.NewCarRepository()
 	journeyRepo := repository.NewJourneyRepository()
@@ -33,15 +34,35 @@ func main() {
 		JourneyRepo: journeyRepo,
 	}
 
+	dropOffHandler := interfaces.NewDropOffHandler(
+		&usecase.DropOffUsecase{
+			CarRepo:     carRepo,
+			JourneyRepo: journeyRepo,
+		},
+		s,
+	)
+
+	locateHandler := interfaces.NewLocateHandler(
+		&usecase.LocateUsecase{
+			JourneyRepo: journeyRepo,
+		},
+		s,
+	)
+
 	go group.Assign()
 
 	r.HandleFunc("/status", interfaces.StatusHandler).Methods("GET")
 	r.HandleFunc("/cars", carHandler.Execute).Methods("PUT")
 	r.HandleFunc("/journey", journeyHandler.Execute).Methods("POST")
-	//r.HandleFunc("/dropoff", app.RemoveBasketHandler).Methods("POST")
-	//r.HandleFunc("/locate", app.RemoveBasketHandler).Methods("POST")
+	r.HandleFunc("/dropoff", dropOffHandler.Execute).Methods("POST")
+	r.HandleFunc("/locate", locateHandler.Execute).Methods("POST")
 
 	log.Println("Api Initialized")
 	http.ListenAndServe(":8080", r)
+
+	// go get
+	// Documentar
+	// TEst en caso de errores form data
+	// coverage
 
 }

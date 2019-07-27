@@ -9,6 +9,7 @@ type CarRepository interface {
 	RemoveAll() error
 	GetEmptys() ([]*domain.Car, error)
 	Update(*domain.Car) error
+	FindByID(int) (*domain.Car, error)
 }
 
 type CarUsecase struct {

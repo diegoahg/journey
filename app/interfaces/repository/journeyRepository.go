@@ -85,3 +85,12 @@ func (r *journeyRepository) Update(journey *domain.Journey) error {
 	r.journeys[journey.GetID()].CarID = journey.GetCarID()
 	return nil
 }
+
+func (r *journeyRepository) RemoveByID(id int) error {
+	for i, journey := range r.journeys {
+		if journey.ID == id {
+			delete(r.journeys, i)
+		}
+	}
+	return nil
+}
