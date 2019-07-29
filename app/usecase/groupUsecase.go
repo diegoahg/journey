@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"log"
+	"fmt"
 	"time"
 )
 
@@ -12,8 +12,6 @@ type GroupUsecase struct {
 
 func (c *GroupUsecase) Assign() error {
 	for {
-		log.Println("EMPEZANDO MI GOROUTINE")
-
 		cars, errC := c.CarRepo.GetEmptys()
 		if errC != nil {
 			return errC
@@ -24,12 +22,9 @@ func (c *GroupUsecase) Assign() error {
 			return errJ
 		}
 
-		for _, car := range cars {
-			for _, journey := range journeys {
-				log.Println("CAR: %#v", car)
-				log.Println("JOURNEY: %#v", journey)
+		for _, journey := range journeys {
+			for _, car := range cars {
 				if journey.GetPeople() <= car.GetEmpty() {
-					log.Println("Yajuu Asigno algo")
 					car.Empty = car.GetEmpty() - journey.GetPeople()
 					if err := c.CarRepo.Update(car); err != nil {
 						return err
@@ -38,9 +33,10 @@ func (c *GroupUsecase) Assign() error {
 					if err := c.JourneyRepo.Update(journey); err != nil {
 						return err
 					}
+					fmt.Println("HOLAAA")
 				}
 			}
 		}
-		time.Sleep(2 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
 }

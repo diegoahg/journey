@@ -64,7 +64,7 @@ func (r *journeyRepository) FindByID(id int) (*domain.Journey, error) {
 			return domain.NewJourney(journey.ID, journey.People, journey.CarID), nil
 		}
 	}
-	return nil, nil
+	return &domain.Journey{}, nil
 }
 
 func (r *journeyRepository) Save(journey *domain.Journey) error {

@@ -44,7 +44,7 @@ func (c *journeyHandler) Execute(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := c.JourneyUsecase.AddJourneys(input); err != nil {
+	if err := c.JourneyUsecase.AddJourney(input); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -61,5 +61,6 @@ func (c *journeyHandler) validate(e usecase.JourneyInput) error {
 	}
 	if e.People > 6 {
 		return fmt.Errorf("This quantity of group is not permitted")
+	}
 	return nil
 }

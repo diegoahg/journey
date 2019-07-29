@@ -55,7 +55,7 @@ func (c *carHandler) Execute(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (c *carHandler) validate(data *[]usecase.CarInput) error {
+func (c *carHandler) validate(data []usecase.CarInput) error {
 	for _, e := range data {
 		if e.ID <= 0 || e.Seats <= 0 {
 			return fmt.Errorf("Data is not valid")

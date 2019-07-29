@@ -16,7 +16,7 @@ func (d *DropOffUsecase) DropOff(di DropOffInput) (int, error) {
 		return 0, err
 	}
 
-	if journey == nil {
+	if journey.GetID() == 0 {
 		return 404, nil
 	}
 

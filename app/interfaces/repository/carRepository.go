@@ -44,7 +44,7 @@ func (r *carRepository) FindByID(id int) (*domain.Car, error) {
 			return domain.NewCar(car.ID, car.Seats, car.Empty), nil
 		}
 	}
-	return nil, nil
+	return &domain.Car{}, nil
 }
 
 func (r *carRepository) GetEmptys() ([]*domain.Car, error) {

@@ -22,7 +22,7 @@ type JourneyInput struct {
 	People int `json:"people"`
 }
 
-func (c *JourneyUsecase) AddJourneys(ji JourneyInput) error {
+func (c *JourneyUsecase) AddJourney(ji JourneyInput) error {
 	journey := domain.NewJourney(ji.ID, ji.People, 0)
 	if err := c.Repo.Save(journey); err != nil {
 		return err

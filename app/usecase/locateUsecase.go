@@ -1,13 +1,12 @@
 package usecase
 
 type LocateUsecase struct {
-	CarRepo     CarRepository
 	JourneyRepo JourneyRepository
 }
 
 // JourneyInput takes incoming JSON payload for writing heart rate
 type LocateInput struct {
-	ID int `json:"id"`
+	ID int `schema:"id"`
 }
 
 func (d *LocateUsecase) Locate(li LocateInput) (int, error) {
@@ -16,7 +15,7 @@ func (d *LocateUsecase) Locate(li LocateInput) (int, error) {
 		return 0, err
 	}
 
-	if journey == nil {
+	if journey.GetID() == 0 {
 		return 404, nil
 	}
 
