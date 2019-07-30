@@ -1,42 +1,45 @@
 package usecase
 
 import (
-	"fmt"
 	"time"
 )
 
 type GroupUsecase struct {
 	CarRepo     CarRepository
 	JourneyRepo JourneyRepository
+	IsTest      bool
 }
 
-func (c *GroupUsecase) Assign() error {
+func (g *GroupUsecase) Assign() error {
 	for {
-		cars, errC := c.CarRepo.GetEmptys()
+		cars, errC := g.CarRepo.GetEmptys()
 		if errC != nil {
 			return errC
 		}
 
-		journeys, errJ := c.JourneyRepo.GetQueueing()
+		journeys, errJ := g.JourneyRepo.GetQueueing()
 		if errJ != nil {
 			return errJ
 		}
 
 		for _, journey := range journeys {
 			for _, car := range cars {
-				if journey.GetPeople() <= car.GetEmpty() {
+				if journey.GetPeople() <= car.GetEmpty() && journey.GetCarID() == 0 && car.GetEmpty() > 0 {
 					car.Empty = car.GetEmpty() - journey.GetPeople()
-					if err := c.CarRepo.Update(car); err != nil {
+					if err := g.CarRepo.Update(car); err != nil {
 						return err
 					}
 					journey.CarID = car.ID
-					if err := c.JourneyRepo.Update(journey); err != nil {
+					if err := g.JourneyRepo.Update(journey); err != nil {
 						return err
 					}
-					fmt.Println("HOLAAA")
 				}
 			}
 		}
 		time.Sleep(5 * time.Second)
+		if g.IsTest == true {
+			break
+		}
 	}
+	return nil
 }
