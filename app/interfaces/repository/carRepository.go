@@ -6,29 +6,21 @@ import (
 	"github.com/diegoahg/journey/app/domain"
 )
 
+// carRepository manage the cars
 type carRepository struct {
 	mu   *sync.Mutex
 	cars map[int]*domain.Car
 }
 
+// NewCarRepository instance new carRepository
 func NewCarRepository() *carRepository {
 	return &carRepository{
 		mu:   &sync.Mutex{},
 		cars: map[int]*domain.Car{},
 	}
 }
-func (r *carRepository) FindAll() ([]*domain.Car, error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	cars := make([]*domain.Car, len(r.cars))
-	i := 0
-	for _, car := range r.cars {
-		cars[i] = domain.NewCar(car.ID, car.Seats, car.Empty)
-		i++
-	}
-	return cars, nil
-}
 
+// RemoveAll get all the cars
 func (r *carRepository) RemoveAll() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -36,6 +28,7 @@ func (r *carRepository) RemoveAll() error {
 	return nil
 }
 
+// FindByID get car by id
 func (r *carRepository) FindByID(id int) (*domain.Car, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -47,6 +40,7 @@ func (r *carRepository) FindByID(id int) (*domain.Car, error) {
 	return &domain.Car{}, nil
 }
 
+// GetEmptys get cars with seats emptys
 func (r *carRepository) GetEmptys() ([]*domain.Car, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -67,6 +61,7 @@ func (r *carRepository) GetEmptys() ([]*domain.Car, error) {
 	return cars, nil
 }
 
+// Save insert a car in the repository
 func (r *carRepository) Save(car *domain.Car) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -78,6 +73,7 @@ func (r *carRepository) Save(car *domain.Car) error {
 	return nil
 }
 
+// Save Modify a car in the repository
 func (r *carRepository) Update(car *domain.Car) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
