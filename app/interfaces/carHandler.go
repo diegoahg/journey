@@ -9,16 +9,19 @@ import (
 	"github.com/diegoahg/journey/app/usecase"
 )
 
+// carHandler manage the car usecase
 type carHandler struct {
 	CarUsecase *usecase.CarUsecase
 }
 
+// NewCarHandler instance a new carHandler
 func NewCarHandler(carUsecase *usecase.CarUsecase) *carHandler {
 	return &carHandler{
 		CarUsecase: carUsecase,
 	}
 }
 
+// Execute process and validate the http request
 func (c *carHandler) Execute(w http.ResponseWriter, r *http.Request) {
 	log.Println("CarsHandler actived")
 	contentType := r.Header.Get("Content-type")
@@ -55,6 +58,7 @@ func (c *carHandler) Execute(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// validate check if the data is correct
 func (c *carHandler) validate(data []usecase.CarInput) error {
 	for _, e := range data {
 		if e.ID <= 0 || e.Seats <= 0 {

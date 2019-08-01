@@ -8,16 +8,20 @@ import (
 	"github.com/diegoahg/journey/app/usecase"
 )
 
+// SchemaInteractor process the form-data request
 type SchemaInteractor interface {
 	NewDecoder() error
 	Decode(interface{}, map[string][]string) error
 }
+
+// dropOffHandler manage the drop off usecase
 
 type dropOffHandler struct {
 	DropOffUsecase *usecase.DropOffUsecase
 	Schema         SchemaInteractor
 }
 
+// NewDropOffHandler instance a new dropOffHandler
 func NewDropOffHandler(dropOffUsecase *usecase.DropOffUsecase, s SchemaInteractor) *dropOffHandler {
 	return &dropOffHandler{
 		DropOffUsecase: dropOffUsecase,
@@ -25,6 +29,7 @@ func NewDropOffHandler(dropOffUsecase *usecase.DropOffUsecase, s SchemaInteracto
 	}
 }
 
+// Execute process and validate the http request
 func (d *dropOffHandler) Execute(w http.ResponseWriter, r *http.Request) {
 	log.Println("DropOffsHandler actived")
 	contentType := r.Header.Get("Content-type")
@@ -70,6 +75,7 @@ func (d *dropOffHandler) Execute(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// validate check if the data is correct
 func (c *dropOffHandler) validate(e usecase.DropOffInput) error {
 	if e.ID == 0 {
 		return fmt.Errorf("Data is not valid")

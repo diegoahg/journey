@@ -8,11 +8,13 @@ import (
 	"github.com/diegoahg/journey/app/usecase"
 )
 
+// locateHandler manage the locate usecase
 type locateHandler struct {
 	LocateUsecase *usecase.LocateUsecase
 	Schema        SchemaInteractor
 }
 
+// NewLocateHandler instance a new locateHandler
 func NewLocateHandler(locateUsecase *usecase.LocateUsecase, s SchemaInteractor) *locateHandler {
 	return &locateHandler{
 		LocateUsecase: locateUsecase,
@@ -20,6 +22,7 @@ func NewLocateHandler(locateUsecase *usecase.LocateUsecase, s SchemaInteractor) 
 	}
 }
 
+// Execute process and validate the http request
 func (d *locateHandler) Execute(w http.ResponseWriter, r *http.Request) {
 	log.Println("LocatesHandler actived")
 	contentType := r.Header.Get("Content-type")
@@ -66,6 +69,7 @@ func (d *locateHandler) Execute(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// validate check if the data is correct
 func (c *locateHandler) validate(e usecase.LocateInput) error {
 	if e.ID == 0 {
 		return fmt.Errorf("Data is not valid")
