@@ -1,14 +1,16 @@
 package usecase
 
+// LocateUsecase is in charge to manage Journey Repository
 type LocateUsecase struct {
 	JourneyRepo JourneyRepository
 }
 
-// JourneyInput takes incoming JSON payload for writing heart rate
+// LocateInput takes incoming JSON payload for writing heart rate
 type LocateInput struct {
 	ID int `schema:"id"`
 }
 
+// Locate search a jounery a return status
 func (d *LocateUsecase) Locate(li LocateInput) (int, error) {
 	journey, err := d.JourneyRepo.FindByID(li.ID)
 	if err != nil {

@@ -1,15 +1,17 @@
 package usecase
 
+// DropOffUsecase is in charge to manage the car and journey repos
 type DropOffUsecase struct {
 	CarRepo     CarRepository
 	JourneyRepo JourneyRepository
 }
 
-// JourneyInput takes incoming JSON payload for writing heart rate
+// DropOffInput takes incoming JSON payload for writing heart rate
 type DropOffInput struct {
 	ID int `schema:"id"`
 }
 
+// DropOff try yo get off passagers of the car
 func (d *DropOffUsecase) DropOff(di DropOffInput) (int, error) {
 	journey, err := d.JourneyRepo.FindByID(di.ID)
 	if err != nil {

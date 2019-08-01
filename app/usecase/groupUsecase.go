@@ -4,12 +4,14 @@ import (
 	"time"
 )
 
+// GroupUsecase is in charge to manage the car and journey repos
 type GroupUsecase struct {
 	CarRepo     CarRepository
 	JourneyRepo JourneyRepository
 	IsTest      bool
 }
 
+// Assign match group of people waiting car wit a new car
 func (g *GroupUsecase) Assign() error {
 	for {
 		cars, errC := g.CarRepo.GetEmptys()
