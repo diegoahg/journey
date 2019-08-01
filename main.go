@@ -58,7 +58,7 @@ func main() {
 	r.HandleFunc("/locate", locateHandler.Execute).Methods("POST")
 
 	log.Println("Api Initialized")
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":9091", r)
 
 	// go get
 	// Documentar
